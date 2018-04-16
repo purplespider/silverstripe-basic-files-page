@@ -1,0 +1,26 @@
+{
+	"name": "purplespider/basic-files-page",
+	"description": "Basic Files Page functionality",
+	"type": "silverstripe-vendormodule",
+	"homepage": "https://github.com/purplespider/silverstripe-basic-galleries",
+	"keywords": ["silverstripe", "files", "page", "bulk"],
+	"license": "BSD-3-Clause",
+	"authors": [{
+			"name": "James Cocker",
+			"email": "ssmodules@pswd.biz"
+	}],
+	"support": {
+		"issues": "https://github.com/purplespider/silverstripe-basic-files-page/issues"
+	},
+	"require": {
+		"silverstripe/framework": "~4.1",
+		"silverstripe/cms": "~4.1",
+		"colymba/gridfield-bulk-editing-tools": "3.*",
+		"symbiote/silverstripe-gridfieldextensions": "^3"
+	},
+	"extra": {
+		"expose": [
+			 "client/dist"
+		]
+	}
+}

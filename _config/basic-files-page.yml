@@ -1,0 +1,7 @@
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_css:
+    - 'purplespider/basic-files-page:client/dist/css/cms.css'
+PurpleSpider\BasicFilesPage\FilesPage:
+  extensions:
+    - PurpleSpider\BasicFilesPage\FilesPageExtension
+  files-cms-tab: Files
