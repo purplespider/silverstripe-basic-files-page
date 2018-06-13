@@ -18,7 +18,7 @@ class FilesPageFile extends DataObject
     
     private static $has_one = [
         'File' => File::class,
-        'FilesPage' => FilesPage::class
+        'FilesPage' => "Page"
     ];
     
     private static $summary_fields = [
@@ -28,6 +28,10 @@ class FilesPageFile extends DataObject
        'File.Size' => 'Size',
        'File.LastEdited' => 'File Added',
        // 'File.get_icon_for_extension' => 'Icon',
+    ];
+    
+    private static $owns = [
+      "File"
     ];
 
     private static $table_name = 'FilesPageFile';
