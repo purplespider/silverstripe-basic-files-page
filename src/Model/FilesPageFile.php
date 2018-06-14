@@ -67,6 +67,62 @@ class FilesPageFile extends DataObject
     {
       return $this->File()->Title.".".$this->File()->Extension;
     }
+    
+    public function getFAIconLabel()
+    {
+      $ext = strtolower($this->File()->getExtension());
+      $icon = "file";
+      
+      switch ($ext) {
+        case "pdf":
+          $icon = "file-pdf";
+          break;
+        case "doc":
+          $icon = "file-word";
+          break;
+        case "docx":
+          $icon = "file-word";
+          break;
+        case "mp4":
+          $icon = "file-video";
+          break;
+        case "ppt":
+          $icon = "file-powerpoint";
+          break;
+        case "pptx":
+          $icon = "file-powerpoint";
+          break;
+        case "jpg":
+          $icon = "file-image";
+          break;
+        case "jpeg":
+          $icon = "file-image";
+          break;
+        case "png":
+          $icon = "file-image";
+          break;
+        case "gif":
+          $icon = "file-image";
+          break;
+        case "xls":
+          $icon = "file-excel";
+          break;
+        case "xlsx":
+          $icon = "file-excel";
+          break;
+        case "mp3":
+          $icon = "file-audio";
+          break;
+        case "wav":
+          $icon = "file-audio";
+          break;
+        case "zip":
+          $icon = "file-archive";
+          break;
+      }
+        
+      return $icon;
+    }
 
     public function canCreate($member = null, $context = array())
     {
