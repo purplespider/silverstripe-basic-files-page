@@ -25,6 +25,10 @@ class FilesPageExtension extends DataExtension
     private static $has_many = array(
     'Files' => FilesPageFile::class
     );
+    
+    private static $owns = [
+      "Files"
+    ];
         
     public function updateCMSFields(FieldList $fields)
     {
