@@ -59,7 +59,13 @@ class FilesPageExtension extends DataExtension
         
         $gridfield = new GridField("Files", "Files", $this->owner->Files(), $gridFieldConfig);
         $fields->addFieldToTab('Root.'.$gridfieldCMSTab, HeaderField::create('addHeader','Add Files'),$insertGalleryBefore);
-        $fields->addFieldToTab('Root.'.$gridfieldCMSTab, $gridfield,$insertGalleryBefore);
+        
+        // Workaround for SilverStripe 4 bug which errors history view on a has_many GridField
+        // https://github.com/silverstripe/silverstripe-framework/issues/3357#issuecomment-405795864
+        $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        if (strpos($url,'history') === false) {
+            $fields->addFieldToTab('Root.'.$gridfieldCMSTab, $gridfield,$insertGalleryBefore);
+        }
         
         return $fields;
     }
