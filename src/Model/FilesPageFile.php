@@ -6,6 +6,7 @@ namespace PurpleSpider\BasicFilesPage;
 use SilverStripe\Assets\File;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\TextField;
+use SilverStripe\Forms\DatetimeField;
 
 
 class FilesPageFile extends DataObject
@@ -26,7 +27,7 @@ class FilesPageFile extends DataObject
        'File.Name' => 'Filename',
        'File.Extension' => 'Type',
        'File.Size' => 'Size',
-       'File.LastEdited' => 'File Added',
+       'File.Created' => 'Date Added',
        // 'File.get_icon_for_extension' => 'Icon',
     ];
     
@@ -45,6 +46,10 @@ class FilesPageFile extends DataObject
         $fields->removeFieldFromTab("Root.Main", "FilesPageID");
         
         $fields->addFieldToTab("Root.Main", TextField::create('Title', 'Link Title'),'File');
+        
+        if ($this->Created) {
+          $fields->addFieldToTab("Root.Info", DatetimeField::create('Created', 'Date Added'));
+        }
         
         return $fields;
     }

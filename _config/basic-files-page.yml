@@ -1,3 +1,6 @@
+---
+Name: basic-files-page
+---
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_css:
     - 'purplespider/basic-files-page:client/dist/css/cms.css'

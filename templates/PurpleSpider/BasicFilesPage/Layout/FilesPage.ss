@@ -4,9 +4,9 @@
 
 <p>$Content</p>
 
-<% if Files %>
+<% if sortedFiles %>
 		<ul>
-	<% loop Files %>
+	<% loop sortedFiles %>
 		
 	<li>
 		<a href="$File.URL"><strong>$Title</strong> ($File.Size, $File.Extension)</a>

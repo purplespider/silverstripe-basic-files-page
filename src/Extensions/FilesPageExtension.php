@@ -11,6 +11,8 @@ use SilverStripe\Assets\Image;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridField;
+
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
@@ -20,6 +22,11 @@ use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
 class FilesPageExtension extends DataExtension
 {
+  
+    private static $db = [
+      "SortBy" => "Enum('Custom,Created,Title','Custom')",
+      "SortOrder" => "Enum('ASC,DESC','ASC')",
+    ];
     
     // One gallery page has many gallery images
     private static $has_many = array(
@@ -46,18 +53,15 @@ class FilesPageExtension extends DataExtension
         $gridFieldConfig->addComponent(new BulkUploader());
         $bulkUpload = $gridFieldConfig->getComponentByType(BulkUploader::class);
         $bulkUpload->setUfSetup('setFolderName', "Managed/FilesPages/".$this->owner->ID."-".$this->owner->URLSegment);
-        // $bulkUpload->setUfConfig('canAttachExisting', false);
-        // $bulkUpload->setUfConfig('canPreviewFolder', false);
-        // $bulkUpload->setUfConfig('overwriteWarning', false); // Required to ensure upload order is consistent
-        // $bulkUpload->setUfConfig('sequentialUploads', true);
-        
         $gridFieldConfig->removeComponentsByType(GridFieldPaginator::class);
-        // $gridFieldConfig->addComponent(new GridFieldSortableRows('SortOrder'));
-        $gridFieldConfig->addComponent(GridFieldOrderableRows::create()->setSortField('SortOrder'));
+        
+        if ($this->owner->SortBy == "Custom" || !$this->owner->SortBy) {
+          $gridFieldConfig->addComponent(GridFieldOrderableRows::create()->setSortField('SortOrder'));
+        }
         $gridFieldConfig->addComponent(new GridFieldPaginator(100));
         $gridFieldConfig->removeComponentsByType(GridFieldAddNewButton::class);
         
-        $gridfield = new GridField("Files", "Files", $this->owner->Files(), $gridFieldConfig);
+        $gridfield = new GridField("Files", "Files", $this->owner->Files()->sort($this->SortOrder()), $gridFieldConfig);
         $fields->addFieldToTab('Root.'.$gridfieldCMSTab, HeaderField::create('addHeader','Add Files'),$insertGalleryBefore);
         
         // Workaround for SilverStripe 4 bug which errors history view on a has_many GridField
@@ -67,11 +71,28 @@ class FilesPageExtension extends DataExtension
             $fields->addFieldToTab('Root.'.$gridfieldCMSTab, $gridfield,$insertGalleryBefore);
         }
         
+        if ($this->owner->Files()->Count()) {
+          $fields->addFieldToTab('Root.'.$gridfieldCMSTab, HeaderField::create('sortHeader','File Sorting'),$insertGalleryBefore);
+          $fields->addFieldToTab("Root.".$gridfieldCMSTab, DropdownField::create('SortBy', 'Sort By', array("Custom"=>"Drag & Drop (Manually)","Created"=>"Date Added","Title"=>"Link Title (Alphabetically)")));
+          if ($this->owner->SortBy != "Custom") {
+            $fields->addFieldToTab("Root.".$gridfieldCMSTab, DropdownField::create('SortOrder', 'Sort Direction', array("ASC"=>"Ascending","DESC"=>"Descending")));
+          }
+        }
+        
         return $fields;
     }
     
-    public function getFiles()
+    public function SortOrder()
     {
-        return $this->owner->Files()->sort("SortOrder");
+      if ($this->owner->SortBy && $this->owner->SortBy != "Custom") {
+        return $this->owner->SortBy." ".$this->owner->SortOrder;
+      }
+      
+      return "SortOrder ASC";
+    }
+    
+    public function sortedFiles()
+    {
+        return $this->owner->Files()->sort($this->SortOrder());
     }
 }
