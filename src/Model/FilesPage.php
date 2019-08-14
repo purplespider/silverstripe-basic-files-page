@@ -7,7 +7,7 @@ use SilverStripe\Forms\LiteralField;
 class FilesPage extends Page
 {
     private static $description = "Allows you to easily add multiple file download links to the page";
-    private static $icon = 'purplespider/basic-files-page:client/dist/images/page_white_put-file.gif';
+    private static $icon_class = 'font-icon-p-download';
     private static $singular_name = "Files Page";
     private static $table_name = "FilesPage";
 
