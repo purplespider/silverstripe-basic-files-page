@@ -13,10 +13,10 @@
 		"issues": "https://github.com/purplespider/silverstripe-basic-files-page/issues"
 	},
 	"require": {
-		"silverstripe/framework": "^4.4",
-		"silverstripe/cms": "^4.4",
-		"colymba/gridfield-bulk-editing-tools": "3.*",
-		"symbiote/silverstripe-gridfieldextensions": "^3"
+		"silverstripe/framework": "^4.4 || ^5 ",
+		"silverstripe/cms": "^4.4 || ^5 ",
+		"colymba/gridfield-bulk-editing-tools": "3.* || ^4",
+		"symbiote/silverstripe-gridfieldextensions": "^3 || ^4"
 	},
 	"extra": {
 		"expose": [
