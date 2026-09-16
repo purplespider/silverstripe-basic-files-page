@@ -14,30 +14,38 @@ use SilverStripe\Forms\GridField\GridField;
 
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\ORM\DataExtension;
-use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
+use SilverStripe\Core\Extension;
 use PurpleSpider\BasicFilesPage\FilesPageFile;
 use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
 
-class FilesPageExtension extends DataExtension
+class FilesPageExtension extends Extension
 {
-  
+
     private static $db = [
       "SortBy" => "Enum('Custom,Created,Title','Custom')",
       "SortOrder" => "Enum('ASC,DESC','ASC')",
     ];
-    
+
     // One gallery page has many gallery images
     private static $has_many = array(
     'Files' => FilesPageFile::class
     );
-    
+
     private static $owns = [
       "Files"
     ];
-        
-    public function updateCMSFields(FieldList $fields)
+
+    // Prevent duplicate CMS fields/tabs: these are all added manually in updateCMSFields()
+    private static $scaffold_cms_fields_settings = [
+        'ignoreFields' => [
+            'SortBy',
+            'SortOrder',
+            'Files',
+        ],
+    ];
+
+    protected function updateCMSFields(FieldList $fields)
     {
         if (!$gridfieldCMSTab = $this->owner->config()->get('files-cms-tab')) {
           $gridfieldCMSTab = "Files";
@@ -62,11 +70,15 @@ class FilesPageExtension extends DataExtension
         $gridFieldConfig->removeComponentsByType(GridFieldAddNewButton::class);
         
         $gridfield = new GridField("Files", "Files", $this->owner->Files()->sort($this->SortOrder()), $gridFieldConfig);
+
+        // Remove the auto-scaffolded 'Files' tab/field so only the manual one below is added
+        $fields->removeByName('Files');
+
         $fields->addFieldToTab('Root.'.$gridfieldCMSTab, HeaderField::create('addHeader','Add Files'),$insertGalleryBefore);
-        
+
         // Workaround for SilverStripe 4 bug which errors history view on a has_many GridField
         // https://github.com/silverstripe/silverstripe-framework/issues/3357#issuecomment-405795864
-        $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        $url = 'http://' . ($_SERVER['SERVER_NAME'] ?? '') . ($_SERVER['REQUEST_URI'] ?? '');
         if (strpos($url,'history') === false) {
             $fields->addFieldToTab('Root.'.$gridfieldCMSTab, $gridfield,$insertGalleryBefore);
         }
