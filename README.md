@@ -16,7 +16,9 @@ Note: This is similar to my [File Listing Page](https://github.com/purplespider/
  * James Cocker (ssmodulesgithub@pswd.biz)
  
 ## Requirements
- * Silverstripe 4.4+ & 5+
+ * Silverstripe 6+
+
+For Silverstripe 4.4-5.x, use the [1.0.0](https://github.com/purplespider/silverstripe-basic-files-page/releases/tag/1.0.0) release instead.
  
 ## Installation Instructions
 
